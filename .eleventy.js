@@ -3,10 +3,11 @@ const { basename, dirname } = require("path");
 const Image = require("@11ty/eleventy-img");
 const postcss = require("postcss");
 const postcssrc = require("postcss-load-config");
+const outputDir = "docs";
 
 const optimizeImages = async () => {
   const images = await fg(["src/**/*.{jpeg,jpg,png,webp,gif,tiff,avif,svg}"], {
-    ignore: ["dist", "**/node_modules"],
+    ignore: [outputDir, "**/node_modules"],
   });
   for (const image of images) {
     await Image(image, {
@@ -15,7 +16,7 @@ const optimizeImages = async () => {
       sharpOptions: {
         animated: true,
       },
-      outputDir: dirname(image).replace(/^src/, "dist"),
+      outputDir: dirname(image).replace(/^src/, outputDir),
     });
   }
 };
@@ -40,7 +41,7 @@ module.exports = (eleventyConfig) => {
   return {
     dir: {
       input: "src",
-      output: "dist",
+      output: outputDir,
     },
   };
 };
